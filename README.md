@@ -8,4 +8,7 @@ sokoban game by vue3
 3. 重构
 
 
+## 功能
+
+-[ ] 撤回
 

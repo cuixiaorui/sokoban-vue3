@@ -3,6 +3,7 @@
     <MapComp></MapComp>
     <PlayerComp></PlayerComp>
     <Cargos></Cargos>
+    <PlacePoints></PlacePoints>
   </div>
 </template>
 
@@ -10,11 +11,12 @@
 import MapComp from "./Map.vue";
 import PlayerComp from "./Player.vue";
 import Cargos from "./Cargos.vue";
+import PlacePoints from './PlacePoints.vue';
 import { initGame } from "../game";
 import { reactive } from "vue";
 
 // TODO need player type
-const player = reactive({ x: 4, y: 2 });
+const player = reactive({ x: 2, y: 2 });
 
 const rawMap = [
   [0, 0, 1, 1, 1, 1, 1, 0],
@@ -29,12 +31,16 @@ const rawMap = [
 ];
 
 const cargos = reactive([
+  // { x: 2, y: 2 },
   { x: 3, y: 2 },
-  { x: 3, y: 4 },
 ]);
 
-initGame(player, rawMap, cargos);
+const placePoints = reactive([
+  { x: 4, y: 2 },
+  { x: 5, y: 3 },
+]);
 
+initGame(player, rawMap, cargos, placePoints);
 </script>
 
 <style scoped></style>

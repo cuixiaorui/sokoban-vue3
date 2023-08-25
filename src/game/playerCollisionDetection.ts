@@ -1,9 +1,9 @@
-import { Player } from "./player";
-import { Element, Map, getMap } from "./map";
+import { getCargoByPosition } from "./cargo";
+import { getMap } from "./map";
 import { Position } from "./position";
 
-export function wallCollisionNew(position: Position) {
-  const element = getMap().getElementByPositionNew(position);
+export function wallCollision(position: Position) {
+  const element = getMap().getElementByPosition(position);
 
   if (element.name === "Wall") {
     return true;
@@ -12,29 +12,8 @@ export function wallCollisionNew(position: Position) {
   return false;
 }
 
-function wallCollision(element: Element) {
-  if (element.name === "Wall") {
-    return true;
-  }
+export function cargoCollision(position: Position) {
+  const cargo = getCargoByPosition(position);
 
-  return false;
-}
-
-export function wallCollisionLeft(
-  position: { x: number; y: number },
-  map: Map
-) {
-  return wallCollision(map.getElementByPosition(position.x, position.y));
-}
-
-export function wallCollisionRight(player: Player, map: Map) {
-  return wallCollision(map.getElementByPosition(player.x + 1, player.y));
-}
-
-export function wallCollisionUp(player: Player, map: Map) {
-  return wallCollision(map.getElementByPosition(player.x, player.y - 1));
-}
-
-export function wallCollisionDown(player: Player, map: Map) {
-  return wallCollision(map.getElementByPosition(player.x, player.y + 1));
+  return !!cargo;
 }

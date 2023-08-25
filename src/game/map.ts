@@ -34,12 +34,8 @@ export class Map {
     return newMap;
   }
 
-  getElementByPositionNew(position: Position) {
+  getElementByPosition(position: Position) {
     return this.data[position.y][position.x];
-  }
-
-  getElementByPosition(x: number, y: number) {
-    return this.data[y][x];
   }
 }
 
