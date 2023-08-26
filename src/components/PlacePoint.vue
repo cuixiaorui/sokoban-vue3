@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute" :style="positionStyle" v-if="!props.data.onTarget">
+  <div class="absolute" :style="positionStyle">
     <img class="block" :src="placePointImg" />
   </div>
 </template>

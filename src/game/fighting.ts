@@ -1,5 +1,5 @@
-import { getCargoByPosition } from "./cargo";
-import { getPlacePoints } from "./placePoint";
+import { getCargoByPosition, handleHitTargetPoint} from "./cargo";
+import { getGameManager } from "./gameManager";
 import { getPlayer } from "./player";
 import { cargoCollision, wallCollision } from "./playerCollisionDetection";
 import {
@@ -21,6 +21,7 @@ export function fighting(direction: Direction) {
   // 1. 箱子推到放置点上
   // 2. 箱子检测是不是碰到了箱子
   const player = getPlayer();
+  const gameManager = getGameManager();
   const map: Record<
     string,
     {
@@ -34,9 +35,7 @@ export function fighting(direction: Direction) {
     up: { calcPositionFn: calcUpPosition, dirPropName: "y", dir: -1 },
     down: { calcPositionFn: calcDownPosition, dirPropName: "y", dir: 1 },
   };
-
   const { calcPositionFn, dirPropName, dir } = map[direction];
-
   if (wallCollision(calcPositionFn(player))) return;
 
   const cargo = getCargoByPosition(calcPositionFn(player));
@@ -53,24 +52,9 @@ export function fighting(direction: Direction) {
     }
 
     cargo[dirPropName] += 1 * dir;
+    handleHitTargetPoint(cargo)
 
-    // 检测 是不是碰到了 placePoint
-    // TODO 重构 现在都是低层次的代码
-    const point = getPlacePoints().find((point) => {
-      return point.x === cargo.x && point.y === cargo.y;
-    });
-
-    // reset
-    if (cargo.onTargetPoint) {
-      cargo.onTargetPoint.onTarget = false;
-      cargo.onTargetPoint = undefined;
-    }
-
-    if (point) {
-      // hit point
-      cargo.onTargetPoint = point;
-      point.onTarget = true;
-    }
+    gameManager.judgeIsWin();
   }
 
   player[dirPropName] += 1 * dir;

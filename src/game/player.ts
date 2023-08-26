@@ -30,3 +30,8 @@ export function getPlayer() {
 export function initPlayer(player: Player) {
   _player = player;
 }
+
+export function updatePlayer (player: Player) {
+  _player.x = player.x
+  _player.y = player.y
+}

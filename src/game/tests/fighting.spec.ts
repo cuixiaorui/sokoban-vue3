@@ -1,24 +1,28 @@
 import { it, expect, describe, beforeEach } from "vitest";
-import { initMap } from "../map";
+import { initMap, Map } from "../map";
 import { getPlayer, initPlayer } from "../player";
 import { getCargos, initCargos } from "../cargo";
 import { Direction, fighting } from "../fighting";
 import { initPlacePoints } from "../placePoint";
+import { GameManager, getGameManager, initGameManager } from "../gameManager";
 
 describe("fighting", () => {
   beforeEach(() => {
-    initMap([
-      [1, 1, 1, 1, 1],
-      [1, 2, 2, 2, 1],
-      [1, 2, 2, 2, 1],
-      [1, 2, 2, 2, 1],
-      [1, 1, 1, 1, 1],
-    ]);
+    initMap(
+      new Map([
+        [1, 1, 1, 1, 1],
+        [1, 2, 2, 2, 1],
+        [1, 2, 2, 2, 1],
+        [1, 2, 2, 2, 1],
+        [1, 1, 1, 1, 1],
+      ])
+    )
+
+    initGameManager(new GameManager());
   });
   describe("move to left", () => {
     it("should move to left when next left position is not wall ", () => {
       initPlayer({ x: 2, y: 1 });
-
       fighting(Direction.left);
 
       expect(getPlayer().x).toBe(1);
@@ -68,37 +72,6 @@ describe("fighting", () => {
       expect(firstCargo.x).toBe(2);
       expect(secondCargo.x).toBe(1);
       expect(getPlayer().x).toBe(3);
-    });
-
-    it("should change cargo statue to onTarget when the cargo hit place point", () => {
-      initPlayer({ x: 3, y: 1 });
-      initCargos([{ x: 2, y: 1 }]);
-      initPlacePoints([{ x: 1, y: 1 }]);
-
-      fighting(Direction.left);
-      
-
-      expect(getPlayer().x).toBe(2);
-      const cargo = getCargos()[0];
-      // TODO 重构这个测试
-      expect(cargo.x).toBe(1)
-      expect(cargo.onTargetPoint).toBeTruthy()
-      expect(cargo.onTargetPoint?.onTarget).toBe(true)
-    });
-
-    it("should change cargo statue to onTarget when the cargo hit place point", () => {
-      initPlayer({ x: 3, y: 1 });
-      initCargos([{ x: 2, y: 1 }]);
-      initPlacePoints([{ x: 1, y: 1 }]);
-
-      fighting(Direction.left);
-
-      fighting(Direction.left);
-      
-      // TODO 重构这个测试
-      const cargo = getCargos()[0];
-      expect(cargo.onTargetPoint).toBeFalsy()
-      expect(cargo.onTargetPoint?.onTarget).toBe(false)
     });
   });
 
@@ -266,6 +239,18 @@ describe("fighting", () => {
       expect(firstCargo.y).toBe(2);
       expect(secondCargo.y).toBe(3);
       expect(getPlayer().y).toBe(1);
+    });
+  });
+
+  describe("game statue", () => {
+    it("should game win when all cargos hit all place points", () => {
+      initPlayer({ x: 1, y: 1 });
+      initCargos([{ x: 2, y: 1 }]);
+      initPlacePoints([{ x: 3, y: 1 }]);
+
+      fighting(Direction.right);
+
+      expect(getGameManager().isWin).toBe(true);
     });
   });
 });

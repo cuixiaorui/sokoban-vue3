@@ -1,7 +1,6 @@
 // 0. 空白
 // 1. 墙
 // 2. 地板
-
 import { Empty } from "./Empty";
 import { Floor } from "./Floor";
 import { Wall } from "./Wall";
@@ -9,9 +8,14 @@ import { Position } from "./position";
 
 export type Element = Empty | Floor | Wall;
 export class Map {
-  rawMap: number[][];
+  rawMap: number[][] ;
   data: Element[][];
   constructor(rawMap: number[][]) {
+    this.rawMap = rawMap;
+    this.data = this.initMap(this.rawMap);
+  }
+
+  update(rawMap: number[][]) {
     this.rawMap = rawMap;
     this.data = this.initMap(this.rawMap);
   }
@@ -40,8 +44,8 @@ export class Map {
 }
 
 let _map: Map;
-export function initMap(rawMap: number[][]) {
-  _map = new Map(rawMap);
+export function initMap(map: Map) {
+  _map = map;
   return _map;
 }
 

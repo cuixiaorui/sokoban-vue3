@@ -1,5 +1,5 @@
 <template>
-  <Cargo v-for="item in cargos" :data="item"></Cargo>
+  <Cargo :key="item.id" v-for="item in cargos" :data="item"></Cargo>
 </template>
 
 <script setup lang="ts">
