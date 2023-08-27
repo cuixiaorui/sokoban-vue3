@@ -1,25 +1,28 @@
-import { reactive } from "vue";
 import { Empty } from "./Empty";
 import { Floor } from "./Floor";
 import { Wall } from "./Wall";
-import { Position } from "./position";
+import { type Position } from "./position";
 
 export type Element = Empty | Floor | Wall;
 
-interface Map {
+export interface Map {
   data: Element[][];
 }
 
-let _map: Map = reactive({} as Map);
+let _map: Map;
+export function setupMap(map: Map) {
+  _map = map;
+}
 
-export function initMap(rawMap: number[][]) {
-  updateMap(rawMap)
+export function createMap(rawMap: number[][]): Map {
+  return {
+    data: convertRawMap(rawMap),
+  };
 }
 
 export function getMap() {
   return _map;
 }
-
 export function updateMap(rawMap: number[][]) {
   _map.data = convertRawMap(rawMap);
 }

@@ -3,20 +3,22 @@ import { updateMap } from "./map";
 import { updatePlacePoints } from "./placePoint";
 import { updatePlayer } from "./player";
 import { gameDatas } from "./gameData";
-import { reactive } from "vue";
 
-interface Game {
+export interface Game {
   currentLevel: number;
   isWin: boolean;
 }
 
-let _game = reactive<Game>({
-  currentLevel: 1,
-  isWin: false,
-});
+let _game: Game;
+export function setupGame(game: Game) {
+  _game = game;
+}
 
-export function initGame(gameConfig: Game) {
-  _game = gameConfig;
+export function createGame(config: { level: number }): Game {
+  return {
+    currentLevel: config.level,
+    isWin: false,
+  };
 }
 
 export function getGame() {
@@ -41,6 +43,8 @@ function updateGame() {
   const { player, map, cargos, placePoints } =
     gameDatas[_game.currentLevel - 1];
 
+  // playerConfig
+  // 上面的这些数据 都是 config
   updatePlayer(player);
   updateMap(map);
   updateCargos(cargos);

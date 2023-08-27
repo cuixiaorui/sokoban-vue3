@@ -1,7 +1,7 @@
 import { getCargoByPosition, handleHitPlacePoint } from "./cargo";
 import { judgeGameWin } from "./game";
 import { getPlayer } from "./player";
-import { cargoCollision, wallCollision } from "./playerCollisionDetection";
+import { collisionCargo, collisionWall } from "./collisionDetection";
 import {
   Position,
   calcDownPosition,
@@ -17,36 +17,37 @@ export enum Direction {
   down = "down",
 }
 
-export function fighting(direction: Direction) {
+const map: Record<
+  string,
+  {
+    calcPositionFn: (position: Position) => Position;
+    dirPropName: "x" | "y";
+    dir: -1 | 1;
+  }
+> = {
+  left: { calcPositionFn: calcLeftPosition, dirPropName: "x", dir: -1 },
+  right: { calcPositionFn: calcRightPosition, dirPropName: "x", dir: 1 },
+  up: { calcPositionFn: calcUpPosition, dirPropName: "y", dir: -1 },
+  down: { calcPositionFn: calcDownPosition, dirPropName: "y", dir: 1 },
+};
+
+export function move(direction: Direction) {
   // 1. 箱子推到放置点上
   // 2. 箱子检测是不是碰到了箱子
   const player = getPlayer();
-  const map: Record<
-    string,
-    {
-      calcPositionFn: (position: Position) => Position;
-      dirPropName: "x" | "y";
-      dir: -1 | 1;
-    }
-  > = {
-    left: { calcPositionFn: calcLeftPosition, dirPropName: "x", dir: -1 },
-    right: { calcPositionFn: calcRightPosition, dirPropName: "x", dir: 1 },
-    up: { calcPositionFn: calcUpPosition, dirPropName: "y", dir: -1 },
-    down: { calcPositionFn: calcDownPosition, dirPropName: "y", dir: 1 },
-  };
   const { calcPositionFn, dirPropName, dir } = map[direction];
-  if (wallCollision(calcPositionFn(player))) return;
+  if (collisionWall(calcPositionFn(player))) return;
 
   const cargo = getCargoByPosition(calcPositionFn(player));
 
   if (cargo) {
     // 看看是不是墙
-    if (wallCollision(calcPositionFn(cargo))) {
+    if (collisionWall(calcPositionFn(cargo))) {
       return;
     }
 
     // 看看是不是箱子
-    if (cargoCollision(calcPositionFn(cargo))) {
+    if (collisionCargo(calcPositionFn(cargo))) {
       return;
     }
 

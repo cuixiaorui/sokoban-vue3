@@ -9,14 +9,16 @@ import Keeper from "../assets/keeper.png";
 import {
   moveRight,
   moveLeft,
-  getPlayer,
   moveUp,
   moveDown,
-} from "../game/player";
+  setupPlayer,
+  Player,
+} from "../game";
 import { usePosition } from "../composables/position";
-import { onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted, reactive } from "vue";
 
-const player = getPlayer();
+const player = reactive({} as Player);
+setupPlayer(player);
 
 function useMove() {
   function handleKeyup(e: KeyboardEvent) {

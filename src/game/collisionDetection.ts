@@ -1,8 +1,8 @@
 import { getCargoByPosition } from "./cargo";
 import { getElementByPosition } from "./map";
-import { Position } from "./position";
+import { type Position } from "./position";
 
-export function wallCollision(position: Position) {
+export function collisionWall(position: Position) {
   const element = getElementByPosition(position);
 
   if (element.name === "Wall") {
@@ -12,7 +12,7 @@ export function wallCollision(position: Position) {
   return false;
 }
 
-export function cargoCollision(position: Position) {
+export function collisionCargo(position: Position) {
   const cargo = getCargoByPosition(position);
 
   return !!cargo;

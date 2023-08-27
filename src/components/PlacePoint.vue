@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import placePointImg from "../assets/target.png";
-import { type PlacePoint } from "../game/placePoint";
+import { type PlacePoint } from "../game";
 import { usePosition } from "../composables/position";
 
 interface Props {

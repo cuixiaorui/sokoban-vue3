@@ -1,27 +1,36 @@
-import { reactive } from "vue";
-import { Direction, fighting } from "./fighting";
+import { Direction, move } from "./move";
 
 export interface Player {
   x: number;
   y: number;
 }
 
-let _player: Player = reactive({} as Player);
+let _player: Player;
+export function setupPlayer(player: Player) {
+  _player = player;
+}
+
+export function createPlayer({ x, y }: { x: number; y: number }): Player {
+  return {
+    x,
+    y,
+  };
+}
 
 export function moveLeft() {
-  fighting(Direction.left);
+  move(Direction.left);
 }
 
 export function moveRight() {
-  fighting(Direction.right);
+  move(Direction.right);
 }
 
 export function moveUp() {
-  fighting(Direction.up);
+  move(Direction.up);
 }
 
 export function moveDown() {
-  fighting(Direction.down);
+  move(Direction.down);
 }
 
 export function getPlayer() {
@@ -32,7 +41,7 @@ export function initPlayer(player: Player) {
   _player = player;
 }
 
-export function updatePlayer(player: Player) {
-  _player.x = player.x;
-  _player.y = player.y;
+export function updatePlayer({ x, y }: { x: number; y: number }) {
+  _player.x = x;
+  _player.y = y;
 }

@@ -12,10 +12,11 @@
 import Wall from "./Wall.vue";
 import Floor from "./Floor.vue";
 import Empty from "./Empty.vue";
-import { type Component } from "vue";
-import { getMap, type Element } from "../game/map";
+import { reactive, type Component } from "vue";
+import {  type Element, type Map, setupMap } from "../game";
 
-const map = getMap()
+const map = reactive({} as Map);
+setupMap(map)
 
 const mapElement: Record<string, Component> = {
   Wall: Wall,

@@ -1,31 +1,49 @@
 import { it, expect, describe, beforeEach } from "vitest";
-import { initMap } from "../map";
-import { getPlayer, initPlayer } from "../player";
-import { getCargos, initCargos } from "../cargo";
-import { Direction, fighting } from "../fighting";
-import { initPlacePoints } from "../placePoint";
-import { getGame, initGame } from "../game";
+import { createMap, setupMap } from "../map";
+import {
+  createPlayer,
+  getPlayer,
+  moveDown,
+  moveLeft,
+  moveRight,
+  moveUp,
+  setupPlayer,
+} from "../player";
+import { createCargos, getCargos, setupCargos } from "../cargo";
+import { createGame, getGame, setupGame } from "../game";
+import { createPlacePoints, setupPlacePoints } from "../placePoint";
+
+function initCargos(config: { x: number; y: number }[]) {
+  setupCargos(createCargos(config));
+}
+
+function initPlayer(config: { x: number; y: number }) {
+  setupPlayer(createPlayer(config));
+}
+
+function initPlacePoints(config: { x: number; y: number }[]) {
+  setupPlacePoints(createPlacePoints(config));
+}
 
 describe("fighting", () => {
   beforeEach(() => {
-    initMap([
-      [1, 1, 1, 1, 1],
-      [1, 2, 2, 2, 1],
-      [1, 2, 2, 2, 1],
-      [1, 2, 2, 2, 1],
-      [1, 1, 1, 1, 1],
-    ]);
+    setupMap(
+      createMap([
+        [1, 1, 1, 1, 1],
+        [1, 2, 2, 2, 1],
+        [1, 2, 2, 2, 1],
+        [1, 2, 2, 2, 1],
+        [1, 1, 1, 1, 1],
+      ])
+    );
 
-    initGame({
-      isWin: false,
-      currentLevel: 1
-    });
-
+    setupGame(createGame({ level: 1 }));
   });
   describe("move to left", () => {
     it("should move to left when next left position is not wall ", () => {
       initPlayer({ x: 2, y: 1 });
-      fighting(Direction.left);
+
+      moveLeft();
 
       expect(getPlayer().x).toBe(1);
     });
@@ -33,7 +51,7 @@ describe("fighting", () => {
     it("should not move to left when next left position is wall ", () => {
       initPlayer({ x: 1, y: 1 });
 
-      fighting(Direction.left);
+      moveLeft();
 
       expect(getPlayer().x).toBe(1);
     });
@@ -42,7 +60,7 @@ describe("fighting", () => {
       initPlayer({ x: 3, y: 1 });
       initCargos([{ x: 2, y: 1 }]);
 
-      fighting(Direction.left);
+      moveLeft();
 
       const cargo = getCargos()[0];
       expect(cargo.x).toBe(1);
@@ -53,7 +71,7 @@ describe("fighting", () => {
       initPlayer({ x: 2, y: 1 });
       initCargos([{ x: 1, y: 1 }]);
 
-      fighting(Direction.left);
+      moveLeft();
 
       const cargo = getCargos()[0];
       expect(cargo.x).toBe(1);
@@ -67,7 +85,7 @@ describe("fighting", () => {
         { x: 1, y: 1 },
       ]);
 
-      fighting(Direction.left);
+      moveLeft();
 
       const firstCargo = getCargos()[0];
       const secondCargo = getCargos()[1];
@@ -81,7 +99,7 @@ describe("fighting", () => {
     it("should move to right when next right position is not wall ", () => {
       initPlayer({ x: 1, y: 1 });
 
-      fighting(Direction.right);
+      moveRight();
 
       expect(getPlayer().x).toBe(2);
     });
@@ -89,7 +107,7 @@ describe("fighting", () => {
     it("should not move to right when next right position is wall ", () => {
       initPlayer({ x: 3, y: 1 });
 
-      fighting(Direction.right);
+      moveRight();
 
       expect(getPlayer().x).toBe(3);
     });
@@ -98,7 +116,7 @@ describe("fighting", () => {
       initPlayer({ x: 1, y: 1 });
       initCargos([{ x: 2, y: 1 }]);
 
-      fighting(Direction.right);
+      moveRight();
 
       const cargo = getCargos()[0];
       expect(cargo.x).toBe(3);
@@ -109,7 +127,7 @@ describe("fighting", () => {
       initPlayer({ x: 2, y: 1 });
       initCargos([{ x: 3, y: 1 }]);
 
-      fighting(Direction.right);
+      moveRight();
 
       const cargo = getCargos()[0];
       expect(cargo.x).toBe(3);
@@ -123,7 +141,7 @@ describe("fighting", () => {
         { x: 3, y: 1 },
       ]);
 
-      fighting(Direction.right);
+      moveRight();
 
       const firstCargo = getCargos()[0];
       const secondCargo = getCargos()[1];
@@ -137,7 +155,7 @@ describe("fighting", () => {
     it("should move to up when next up position is not wall ", () => {
       initPlayer({ x: 1, y: 2 });
 
-      fighting(Direction.up);
+      moveUp();
 
       expect(getPlayer().y).toBe(1);
     });
@@ -145,7 +163,7 @@ describe("fighting", () => {
     it("should not move to up when next up position is wall ", () => {
       initPlayer({ x: 1, y: 1 });
 
-      fighting(Direction.up);
+      moveUp();
 
       expect(getPlayer().y).toBe(1);
     });
@@ -153,18 +171,16 @@ describe("fighting", () => {
       initPlayer({ x: 1, y: 3 });
       initCargos([{ x: 1, y: 2 }]);
 
-      fighting(Direction.up);
-
+      moveUp();
       const cargo = getCargos()[0];
       expect(cargo.y).toBe(1);
       expect(getPlayer().y).toBe(2);
     });
-
     it("should not move to up when cargo's next position is wall", () => {
       initPlayer({ x: 1, y: 2 });
       initCargos([{ x: 1, y: 1 }]);
 
-      fighting(Direction.up);
+      moveUp();
 
       const cargo = getCargos()[0];
       expect(cargo.y).toBe(1);
@@ -178,8 +194,7 @@ describe("fighting", () => {
         { x: 1, y: 1 },
       ]);
 
-      fighting(Direction.up);
-
+      moveUp();
       const firstCargo = getCargos()[0];
       const secondCargo = getCargos()[1];
       expect(firstCargo.y).toBe(2);
@@ -192,7 +207,7 @@ describe("fighting", () => {
     it("should move to down when next down position is not wall ", () => {
       initPlayer({ x: 1, y: 1 });
 
-      fighting(Direction.down);
+      moveDown();
 
       expect(getPlayer().y).toBe(2);
     });
@@ -200,7 +215,7 @@ describe("fighting", () => {
     it("should not move to down when next down position is wall ", () => {
       initPlayer({ x: 1, y: 3 });
 
-      fighting(Direction.down);
+      moveDown();
 
       expect(getPlayer().y).toBe(3);
     });
@@ -209,7 +224,7 @@ describe("fighting", () => {
       initPlayer({ x: 1, y: 1 });
       initCargos([{ x: 1, y: 2 }]);
 
-      fighting(Direction.down);
+      moveDown();
 
       const cargo = getCargos()[0];
       expect(cargo.y).toBe(3);
@@ -220,7 +235,7 @@ describe("fighting", () => {
       initPlayer({ x: 1, y: 2 });
       initCargos([{ x: 1, y: 3 }]);
 
-      fighting(Direction.down);
+      moveDown();
 
       const cargo = getCargos()[0];
       expect(cargo.y).toBe(3);
@@ -234,7 +249,7 @@ describe("fighting", () => {
         { x: 1, y: 3 },
       ]);
 
-      fighting(Direction.down);
+      moveDown();
 
       const firstCargo = getCargos()[0];
       const secondCargo = getCargos()[1];
@@ -250,7 +265,7 @@ describe("fighting", () => {
       initCargos([{ x: 2, y: 1 }]);
       initPlacePoints([{ x: 3, y: 1 }]);
 
-      fighting(Direction.right);
+      moveRight();
 
       expect(getGame().isWin).toBe(true);
     });

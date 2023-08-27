@@ -1,12 +1,19 @@
 <template>
-  <PlacePoint :key="item.id" v-for="item in placePoints" :data="item"></PlacePoint>
+  <PlacePointComp
+    :key="item.id"
+    v-for="item in placePoints"
+    :data="item"
+  ></PlacePointComp>
 </template>
 
 <script setup lang="ts">
-import PlacePoint from "./PlacePoint.vue";
-import { getPlacePoints } from "../game/placePoint";
+import PlacePointComp from "./PlacePoint.vue";
+import { type PlacePoint, setupPlacePoints } from "../game";
+import { reactive } from "vue";
 
-const placePoints = getPlacePoints();
+const placePoints = reactive([] as PlacePoint[]);
+
+setupPlacePoints(placePoints);
 </script>
 
 <style scoped></style>

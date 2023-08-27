@@ -1,5 +1,5 @@
-import { reactive } from "vue";
 import { generateId } from "./id";
+import { Position } from "./position";
 
 export interface PlacePoint {
   x: number;
@@ -7,10 +7,16 @@ export interface PlacePoint {
   id: number;
 }
 
-let _placePoints: PlacePoint[] = reactive([] as PlacePoint[]);
+let _placePoints: PlacePoint[] = []
 
-export function initPlacePoints(rawPlacePoints: { x: number; y: number }[]) {
-  _placePoints = rawPlacePoints.map(({ x, y }) => {
+export function setupPlacePoints(placePoint: PlacePoint[]) {
+  _placePoints = placePoint;
+}
+
+export function createPlacePoints(
+  config: { x: number; y: number }[]
+): PlacePoint[] {
+  return config.map(({ x, y }) => {
     return createPlacePoint(x, y);
   });
 }
@@ -24,11 +30,17 @@ function createPlacePoint(x: number, y: number): PlacePoint {
 }
 
 export function updatePlacePoints(rawPlacePoints: { x: number; y: number }[]) {
-  cleanAllPlacePoints()
+  cleanAllPlacePoints();
 
   // add new placePoint
   rawPlacePoints.forEach(({ x, y }) => {
     _placePoints.push(createPlacePoint(x, y));
+  });
+}
+
+export function getPointByPosition(position: Position) {
+  return _placePoints.find((point) => {
+    return point.x === position.x && point.y === position.y;
   });
 }
 
