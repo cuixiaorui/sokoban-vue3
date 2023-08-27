@@ -14,13 +14,15 @@ import MapComp from "./Map.vue";
 import PlayerComp from "./Player.vue";
 import Cargos from "./Cargos.vue";
 import PlacePoints from "./PlacePoints.vue";
-import { setupGame,createGame, startGame, startNextLevel} from "../game";
-import { reactive } from "vue";
+import { setupGame, createGame, startGame, startNextLevel } from "../game";
+import { reactive, onMounted } from "vue";
 
-const game = reactive(createGame({level: 1}));
+const game = reactive(createGame({ level: 1 }));
 setupGame(game);
 
-startGame();
+onMounted(() => {
+  startGame();
+});
 
 function handleNextCheckpoint() {
   startNextLevel();

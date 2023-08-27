@@ -7,7 +7,7 @@ import CargoComp from "./Cargo.vue";
 import { setupCargos, type Cargo } from "../game";
 import { reactive } from "vue";
 
-const cargos = reactive({} as Cargo[]);
+const cargos = reactive([] as Cargo[]);
 setupCargos(cargos);
 </script>
 
