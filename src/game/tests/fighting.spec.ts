@@ -1,24 +1,26 @@
 import { it, expect, describe, beforeEach } from "vitest";
-import { initMap, Map } from "../map";
+import { initMap } from "../map";
 import { getPlayer, initPlayer } from "../player";
 import { getCargos, initCargos } from "../cargo";
 import { Direction, fighting } from "../fighting";
 import { initPlacePoints } from "../placePoint";
-import { GameManager, getGameManager, initGameManager } from "../gameManager";
+import { getGame, initGame } from "../game";
 
 describe("fighting", () => {
   beforeEach(() => {
-    initMap(
-      new Map([
-        [1, 1, 1, 1, 1],
-        [1, 2, 2, 2, 1],
-        [1, 2, 2, 2, 1],
-        [1, 2, 2, 2, 1],
-        [1, 1, 1, 1, 1],
-      ])
-    )
+    initMap([
+      [1, 1, 1, 1, 1],
+      [1, 2, 2, 2, 1],
+      [1, 2, 2, 2, 1],
+      [1, 2, 2, 2, 1],
+      [1, 1, 1, 1, 1],
+    ]);
 
-    initGameManager(new GameManager());
+    initGame({
+      isWin: false,
+      currentLevel: 1
+    });
+
   });
   describe("move to left", () => {
     it("should move to left when next left position is not wall ", () => {
@@ -250,7 +252,7 @@ describe("fighting", () => {
 
       fighting(Direction.right);
 
-      expect(getGameManager().isWin).toBe(true);
+      expect(getGame().isWin).toBe(true);
     });
   });
 });

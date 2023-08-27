@@ -1,5 +1,5 @@
-import { getCargoByPosition, handleHitTargetPoint} from "./cargo";
-import { getGameManager } from "./gameManager";
+import { getCargoByPosition, handleHitPlacePoint } from "./cargo";
+import { judgeGameWin } from "./game";
 import { getPlayer } from "./player";
 import { cargoCollision, wallCollision } from "./playerCollisionDetection";
 import {
@@ -21,7 +21,6 @@ export function fighting(direction: Direction) {
   // 1. 箱子推到放置点上
   // 2. 箱子检测是不是碰到了箱子
   const player = getPlayer();
-  const gameManager = getGameManager();
   const map: Record<
     string,
     {
@@ -52,9 +51,10 @@ export function fighting(direction: Direction) {
     }
 
     cargo[dirPropName] += 1 * dir;
-    handleHitTargetPoint(cargo)
 
-    gameManager.judgeIsWin();
+    handleHitPlacePoint(cargo);
+
+    judgeGameWin();
   }
 
   player[dirPropName] += 1 * dir;

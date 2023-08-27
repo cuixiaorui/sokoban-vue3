@@ -48,6 +48,6 @@ export const gameDatas: GameData[] = [
       y: 2,
     },
     cargos: [{ x: 3, y: 2 }],
-    placePoints: [{ x: 5, y: 3 }],
+    placePoints: [{ x: 4, y: 4 }],
   },
 ];

@@ -1,3 +1,4 @@
+import { reactive } from "vue";
 import { Direction, fighting } from "./fighting";
 
 export interface Player {
@@ -5,7 +6,7 @@ export interface Player {
   y: number;
 }
 
-let _player: Player;
+let _player: Player = reactive({} as Player);
 
 export function moveLeft() {
   fighting(Direction.left);
@@ -31,7 +32,7 @@ export function initPlayer(player: Player) {
   _player = player;
 }
 
-export function updatePlayer (player: Player) {
-  _player.x = player.x
-  _player.y = player.y
+export function updatePlayer(player: Player) {
+  _player.x = player.x;
+  _player.y = player.y;
 }

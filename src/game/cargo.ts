@@ -1,41 +1,44 @@
 import { PlacePoint } from "./placePoint";
 import { Position } from "./position";
 import { getPlacePoints } from "./placePoint";
+import { reactive } from "vue";
+import { generateId } from "./id";
 
 export interface Cargo {
   x: number;
   y: number;
-  id?: number;
+  id: number;
   onTargetPoint?: PlacePoint | undefined;
 }
 
-let _cargos: Cargo[] = [];
-let id = 0;
-export function initCargos(cargos: Cargo[]) {
-  _cargos = cargos;
-
-  _cargos.forEach((cargo) => {
-    cargo.id = id++;
+let _cargos = reactive([] as Cargo[]);
+export function initCargos(rawCargos: { x: number; y: number }[]) {
+  _cargos = rawCargos.map(({ x, y }) => {
+    return createCargo(x, y);
   });
 }
 
-export function updateCargos(cargos: Cargo[]) {
-  cargos.forEach((cargo) => {
-    cargo.id = id++;
-  });
+function createCargo(x: number, y: number): Cargo {
+  return {
+    x,
+    y,
+    id: generateId(),
+  };
+}
 
-  let len = _cargos.length - 1;
-
-  for (let i = len; i >= 0; i--) {
-    _cargos.splice(i, 1);
-  }
-
-  cargos.forEach((cargo) => {
-    _cargos.push(cargo);
+export function updateCargos(rawCargos: { x: number; y: number }[]) {
+  cleanAllCargos()
+  // add new cargos
+  rawCargos.forEach((rawCargo) => {
+    _cargos.push(createCargo(rawCargo.x, rawCargo.y));
   });
 }
 
-export function handleHitTargetPoint(cargo: Cargo) {
+function cleanAllCargos() {
+  _cargos.length = 0;
+}
+
+export function handleHitPlacePoint(cargo: Cargo) {
   reset(cargo);
 
   const point = getOnTargetPoint(cargo);
@@ -64,5 +67,11 @@ export function getCargos() {
 export function getCargoByPosition(position: Position) {
   return _cargos.find((c) => {
     return c.x === position.x && c.y === position.y;
+  });
+}
+
+export function isAllCargoOnTarget() {
+  return _cargos.every((cargo) => {
+    return !!cargo.onTargetPoint;
   });
 }

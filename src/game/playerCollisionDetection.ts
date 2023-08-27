@@ -1,9 +1,9 @@
 import { getCargoByPosition } from "./cargo";
-import { getMap } from "./map";
+import { getElementByPosition } from "./map";
 import { Position } from "./position";
 
 export function wallCollision(position: Position) {
-  const element = getMap().getElementByPosition(position);
+  const element = getElementByPosition(position);
 
   if (element.name === "Wall") {
     return true;

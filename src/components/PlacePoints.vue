@@ -1,5 +1,5 @@
 <template>
-  <PlacePoint v-for="item in placePoints" :data="item"></PlacePoint>
+  <PlacePoint :key="item.id" v-for="item in placePoints" :data="item"></PlacePoint>
 </template>
 
 <script setup lang="ts">
