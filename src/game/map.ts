@@ -1,9 +1,8 @@
-import { Empty } from "./Empty";
 import { Floor } from "./Floor";
 import { Wall } from "./Wall";
 import { type Position } from "./position";
 
-export type Element = Empty | Floor | Wall;
+export type Element = Floor | Wall;
 
 export interface Map {
   data: Element[][];
@@ -23,11 +22,8 @@ export function createMap(rawMap: number[][]): Map {
 export function getMap() {
   return _map;
 }
-export function updateMap(rawMap: number[][]) {
-  _map.data = convertRawMap(rawMap);
-}
-
-export function getElementByPosition(position: Position) {
+export function updateMap(rawMap: number[][]) { _map.data = convertRawMap(rawMap);
+} export function getElementByPosition(position: Position) {
   return _map.data[position.y][position.x];
 }
 
@@ -39,15 +35,12 @@ function convertRawMap(rawMap: number[][]) {
   rawMap.forEach((row, i) => {
     newMap[i] = [];
     row.forEach((col, j) => {
-      if (col === 0) {
-        newMap[i][j] = new Empty();
-      } else if (col === 1) {
+      if (col === 1) {
         newMap[i][j] = new Wall();
       } else if (col === 2) {
         newMap[i][j] = new Floor();
       }
-    });
-  });
+    }); });
 
   return newMap;
 }

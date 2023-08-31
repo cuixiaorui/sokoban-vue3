@@ -1,6 +1,6 @@
 import { type PlacePoint, getPointByPosition } from "./placePoint";
 import { type Position } from "./position";
-import { generateId } from "./id";
+import { generateId } from "../utils/id";
 
 export interface Cargo {
   x: number;

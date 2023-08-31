@@ -1,4 +1,4 @@
-import { generateId } from "./id";
+import { generateId } from "../utils/id";
 import { Position } from "./position";
 
 export interface PlacePoint {

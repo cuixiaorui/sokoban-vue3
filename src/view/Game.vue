@@ -10,10 +10,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import MapComp from "./Map.vue";
-import PlayerComp from "./Player.vue";
-import Cargos from "./Cargos.vue";
-import PlacePoints from "./PlacePoints.vue";
+import MapComp from "../components/Map.vue";
+import PlayerComp from "../components/Player.vue";
+import Cargos from "../components/Cargos.vue";
+import PlacePoints from "../components/PlacePoints.vue";
 import { setupGame, createGame, startGame, startNextLevel } from "../game";
 import { reactive, onMounted } from "vue";
 
