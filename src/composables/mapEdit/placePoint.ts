@@ -3,7 +3,7 @@ import { generateId } from "../../utils/id";
 import { type EditElement } from "./editElement";
 import placePointImgSrc from "../../assets/target.png";
 
-interface PlacePoint {
+export interface PlacePoint {
   x: number;
   y: number;
   id: number;
@@ -26,10 +26,25 @@ export function usePlacePoint() {
     };
   }
   function addPlacePoint(x: number, y: number) {
-    placePoints.push(createPlacePoint(x, y));
+    const placePoint = createPlacePoint(x, y);
+    placePoints.push(placePoint);
+
+    return placePoint;
+  }
+
+  function removePlacePoint(placePoint: PlacePoint) {
+    const index = placePoints.findIndex((p) => p.id === placePoint.id);
+
+    if (index !== -1) placePoints.splice(index, 1);
+  }
+
+  function reset() {
+    placePoints.length = 0;
   }
 
   return {
+    reset,
+    removePlacePoint,
     addPlacePoint,
     placePoints,
   };

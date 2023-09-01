@@ -51,6 +51,7 @@ function update() {
       keeper.x = props.x;
       keeper.y = props.y;
       isShowKeeper.value = true;
+      type.value = TileType.floor;
       break;
     case "cargo":
       addCargo(props.x, props.y);

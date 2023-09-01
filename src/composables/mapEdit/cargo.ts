@@ -27,11 +27,26 @@ export function useCargo() {
   }
 
   function addCargo(x: number, y: number) {
-    cargos.push(createCargo(x, y));
+    const cargo = createCargo(x, y);
+    cargos.push(cargo);
+    return cargo;
+  }
+
+  function removeCargo(cargo: Cargo) {
+
+    const cargoIndex = cargos.findIndex((c) => c.id === cargo.id);
+
+    if (cargoIndex !== -1) cargos.splice(cargoIndex, 1);
+  }
+
+  function reset () {
+    cargos.length = 0
   }
 
   return {
     cargos,
+    reset,
     addCargo,
+    removeCargo,
   };
 }
