@@ -3,8 +3,8 @@ import WallImg from "../../assets/wall.png";
 import { type EditElement } from "./editElement";
 
 export enum TileType {
-  floor = 1,
-  wall = 2,
+  wall = 1,
+  floor = 2,
 }
 
 interface TileEditElement extends EditElement {

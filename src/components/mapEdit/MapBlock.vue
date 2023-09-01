@@ -5,15 +5,13 @@
     @mousemove="handleMousemove"
     @mousedown="handleDown"
   >
-    <div v-if="type === TileType.wall">
+    <div v-if="data.type === TileType.wall">
       <img :src="wallImg" draggable="false" />
     </div>
-    <div v-else-if="type === TileType.floor">
+    <div v-else-if="data.type === TileType.floor">
       <img :src="floorImg" draggable="false" />
     </div>
-    <div v-else class="bg-red-500 w-[32px] h-[32px]">
-      <slot></slot>
-    </div>
+    <div v-else class="bg-red-500 w-[32px] h-[32px]"></div>
   </div>
 </template>
 
@@ -22,15 +20,14 @@ import { currentSelectedEditElement } from "../../composables/mapEdit/editElemen
 import floorImg from "../../assets/floor.png";
 import wallImg from "../../assets/wall.png";
 import { TileType, isTile } from "../../composables/mapEdit/tile";
-import { ref } from "vue";
 import { useCollectMapBlock } from "../../composables/mapEdit/collectMapBlock";
 import { useKeeper } from "../../composables/mapEdit/keeper";
 import { useCargo } from "../../composables/mapEdit/cargo";
 import { usePlacePoint } from "../../composables/mapEdit/placePoint";
+import { MapBlock } from "../../composables/mapEdit/map";
 
 interface Prop {
-  x: number;
-  y: number;
+  data: MapBlock;
 }
 
 const props = defineProps<Prop>();
@@ -40,39 +37,36 @@ const { isShowKeeper, keeper } = useKeeper();
 const { addCargo } = useCargo();
 const { addPlacePoint } = usePlacePoint();
 
-const type = ref<TileType | undefined>();
-
 function update() {
   if (!currentSelectedEditElement.value) return;
 
   const editElementType = currentSelectedEditElement.value.type;
   switch (editElementType) {
     case "keeper":
-      keeper.x = props.x;
-      keeper.y = props.y;
+      keeper.x = props.data.x;
+      keeper.y = props.data.y;
       isShowKeeper.value = true;
-      type.value = TileType.floor;
+      changeType(TileType.floor);
       break;
     case "cargo":
-      addCargo(props.x, props.y);
+      addCargo(props.data.x, props.data.y);
       // 这里的 cargo 和 floor 应该是绑定在一起的
-      type.value = TileType.floor;
+      changeType(TileType.floor);
       break;
     case "placePoint":
-      addPlacePoint(props.x, props.y);
-      type.value = TileType.floor;
+      addPlacePoint(props.data.x, props.data.y);
+      changeType(TileType.floor);
       break;
     default:
       if (isTile(currentSelectedEditElement.value)) {
-        type.value = editElementType;
+        changeType(editElementType);
       }
       break;
   }
 }
-
 function changeType(newType: number) {
-  if (newType === type.value) return;
-  type.value = newType;
+  if (newType === props.data.type) return;
+  props.data.type = newType;
 }
 
 function handleMousemove() {

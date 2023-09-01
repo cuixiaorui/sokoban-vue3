@@ -1,5 +1,5 @@
 export interface GameData {
-  name: string;
+  name?: string;
   map: number[][];
   player: {
     x: number;
@@ -46,5 +46,34 @@ export const gameDatas: GameData[] = [
     },
     cargos: [{ x: 3, y: 2 }],
     placePoints: [{ x: 4, y: 4 }],
+  },
+  {
+    name:"第三关",
+    map: [
+      [1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 2, 2, 2, 2, 2, 2, 1],
+      [1, 2, 1, 2, 2, 1, 2, 1],
+      [1, 2, 2, 2, 2, 2, 2, 1],
+      [1, 2, 2, 1, 1, 2, 2, 1],
+      [1, 2, 2, 2, 2, 2, 2, 1],
+      [1, 2, 2, 2, 2, 2, 2, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1],
+    ],
+    player: {
+      x: 1,
+      y: 1,
+    },
+    cargos: [
+      {
+        x: 3,
+        y: 6,
+      },
+    ],
+    placePoints: [
+      {
+        x: 4,
+        y: 6,
+      },
+    ],
   },
 ];
